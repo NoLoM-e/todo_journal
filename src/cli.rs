@@ -2,8 +2,8 @@ use std::path::PathBuf;
 
 use structopt::StructOpt;
 
-#[derive(Debug, StructOpt)]
-enum Action {
+#[derive(Debug, StructOpt, Clone)]
+pub enum Action {
     /// Add task to journal
     Add {
         /// Task description
@@ -30,4 +30,13 @@ pub struct CliArgs {
     action: Action,
     #[structopt(parse(from_os_str), short, long)]
     journal_path: Option<PathBuf>,
+}
+
+impl CliArgs {
+    pub fn get_action(&self) -> Action {
+        self.action.clone()
+    }
+    pub fn get_journal_path(&self) -> Option<PathBuf> {
+        self.journal_path.clone()
+    }
 }

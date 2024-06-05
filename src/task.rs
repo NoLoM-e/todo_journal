@@ -38,7 +38,7 @@ pub fn add_task(journal_path: PathBuf, task: Task) -> Result<(), Error> {
     let mut tasks_from_journal = read_tasks_from_file(&journal_path)?;
     tasks_from_journal.push(task);
 
-    write_tasks_to_file(&journal_path, tasks_from_journal);
+    write_tasks_to_file(&journal_path, tasks_from_journal)?;
 
     Ok(())
 }
@@ -71,7 +71,7 @@ pub fn list_tasks(journal_path: PathBuf) -> Result<(), Error> {
         return Ok(());
     }
     for (i, task) in tasks.iter().enumerate() {
-        println!("{} - {}", i, task);
+        println!("{} - {}", i + 1, task);
     }
 
     Ok(())
@@ -79,6 +79,7 @@ pub fn list_tasks(journal_path: PathBuf) -> Result<(), Error> {
 
 fn read_tasks_from_file(path: &PathBuf) -> Result<Vec<Task>, Error> {
     let journal = OpenOptions::new()
+        .write(true)
         .read(true)
         .create(true)
         .truncate(false)
